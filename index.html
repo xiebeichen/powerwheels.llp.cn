@@ -137,6 +137,32 @@
         .kwm-hero .kwm-dots { bottom: 20px; gap: 8px; }
         .kwm-hero .kwm-dots span { width: 8px; height: 8px; }
     }
+/* ========== 新增：品牌 Logo 样式（对齐 + 分色）========== */
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 42px; /* 固定高度以保证垂直居中 */
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.brand .cn,
+.brand .en {
+    display: block;
+}
+
+/* 确保 logo 在 header 中水平居中且垂直居中 */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
 
     /* ========== KWM 侧边栏 ========== */
 
@@ -519,32 +545,91 @@
     </div>
 
     <!-- 顶部导航栏 -->
-    <header>
-        <div class="container nav-container">
-            <div class="logo">
-                <!-- ★ 汉堡菜单按钮 ★ -->
-                <div class="kwm-hamburger" id="sidebarOpen">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+<!-- 顶部导航栏 -->
+<header>
+    <div class="container nav-container">
+        <div class="logo">
+            <!-- ★ 汉堡菜单按钮 ★ -->
+            <div class="kwm-hamburger" id="sidebarOpen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <!-- ★ 重新设计的威伦律师事务所 Logo ★ -->
+            <div class="brand-logo">
+                <!-- 红色圆角方块 + 白色 P -->
+                <div class="logo-icon" style="
+                    width: 42px;
+                    height: 42px;
+                    background-color: #e63946;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 12px;
+                    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+                ">
+                    <span style="
+                        font-size: 24px;
+                        font-weight: bold;
+                        color: white;
+                        letter-spacing: 1px;
+                        font-family: 'Arial', sans-serif;
+                    ">P</span>
                 </div>
-                <div class="logo-icon">P</div>
-                <div class="brand">
-                    <span class="cn">威伦律师事务所</span>
-                    <span class="en">POWER & WHEELS</span>
+
+                <!-- 中英文组合：右对齐 + 居中排版 -->
+                <div class="brand-text" style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    text-align: left;
+                    gap: 2px;
+                    font-family: 'Noto Serif SC', 'Songti SC', serif;
+                ">
+                    <!-- 中文：威伦律师事务所 -->
+                    <span class="cn" style="
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: #ffffff;
+                        letter-spacing: 1px;
+                        line-height: 1.4;
+                    ">威伦律师事务所</span>
+
+                    <!-- 英文：POWER & WHEELS（EE 分色） -->
+                    <span class="en" style="
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: #ffffff;
+                        letter-spacing: 1px;
+                        line-height: 1.4;
+                        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+                    ">
+                        POWER & 
+                        <span style="color: #e63946;">W</span>
+                        <span style="color: #2a5db0;">H</span>
+                        <span style="color: #e63946;">E</span>
+                        <span style="color: #2a5db0;">E</span>
+                        <span style="color: #e63946;">L</span>
+                        <span style="color: #2a5db0;">S</span>
+                    </span>
                 </div>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="#">专业领域</a></li>
-                    <li><a href="#">洞察视野</a></li>
-                    <li><a href="#partners">专业人员</a></li>
-                    <li><a href="#news">新闻中心</a></li>
-                    <li><a href="#contact">联系我们</a></li>
-                </ul>
-            </nav>
         </div>
-    </header>
+
+        <nav>
+            <ul>
+                <li><a href="#">专业领域</a></li>
+                <li><a href="#">洞察视野</a></li>
+                <li><a href="#partners">专业人员</a></li>
+                <li><a href="#news">新闻中心</a></li>
+                <li><a href="#contact">联系我们</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
 
     <main>
         <!-- ★ 新轮播 ★ -->
