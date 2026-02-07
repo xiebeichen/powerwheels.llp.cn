@@ -137,6 +137,8 @@
         .kwm-hero .kwm-dots { bottom: 20px; gap: 8px; }
         .kwm-hero .kwm-dots span { width: 8px; height: 8px; }
     }
+/* ========== 页脚样式（黑底 + 金杜风格）========== */
+
 /* ========== 新增：品牌 Logo 样式（对齐 + 分色）========== */
 .brand-logo {
     display: flex;
@@ -429,10 +431,198 @@
         .kwm-sidebar-right.expanded { width: calc(100vw - 260px); }
         .kwm-sb-panel { padding: 20px 20px; }
     }
+/* ========== Footer (screenshot-like) ========== */
+.footer-kwm{
+  background:#0a0f18;
+  color:#fff;
+  padding:70px 0 50px;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+}
+
+.footer-kwm__inner{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 40px;
+}
+
+/* 顶部：三列导航 + 右上角箭头 */
+.footer-kwm__top{
+  position:relative;
+  padding-bottom:60px;
+}
+
+.footer-kwm__cols{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:80px;
+  align-items:start;
+}
+
+.footer-kwm__col h4{
+  font-size:18px;
+  font-weight:700;
+  margin:0 0 18px 0;
+  color:#ffffff;
+  letter-spacing:1px;
+}
+
+.footer-kwm__col ul{ list-style:none; margin:0; padding:0; }
+.footer-kwm__col li{ margin:0 0 14px 0; }
+
+.footer-kwm__col a{
+  color:rgba(255,255,255,.75);
+  text-decoration:none;
+  font-size:15px;
+  letter-spacing:.5px;
+  transition:color .2s ease;
+}
+.footer-kwm__col a:hover{ color:#ffffff; }
+
+.footer-kwm__toTop{
+  position:absolute;
+  right:0;
+  top:0;
+  width:34px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#b8963e;
+  text-decoration:none;
+  font-size:22px;
+  line-height:1;
+  transition:transform .2s ease, color .2s ease;
+}
+.footer-kwm__toTop:hover{
+  transform:translateY(-2px);
+  color:#ffffff;
+}
+
+/* 底部：左品牌 + 右侧链接 */
+.footer-kwm__bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:40px;
+}
+
+/* 左侧品牌区（保留你的 logo） */
+.footer-kwm__brandRow{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.footer-kwm__logoIcon{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:#e63946;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 12px rgba(230,57,70,.25);
+  flex:0 0 auto;
+}
+.footer-kwm__logoIcon span{
+  font-family:Arial,sans-serif;
+  font-size:24px;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:1px;
+}
+
+.footer-kwm__brandText .cn{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:1px;
+  line-height:1.2;
+}
+.footer-kwm__brandText .en{
+  margin-top:6px;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:1px;
+  line-height:1.2;
+}
+
+.footer-kwm__meta{
+  margin-top:18px;
+  font-size:13px;
+  color:rgba(255,255,255,.65);
+  letter-spacing:.2px;
+}
+
+/* 右侧：社交 + 法律 */
+.footer-kwm__right{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:18px;
+}
+
+.footer-kwm__social{
+  display:flex;
+  gap:16px;
+}
+
+.footer-kwm__socialBtn{
+  width:44px;
+  height:44px;
+  border:1px solid rgba(255,255,255,.6);
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:rgba(255,255,255,.85);
+  text-decoration:none;
+  transition:border-color .2s ease, color .2s ease;
+}
+.footer-kwm__socialBtn:hover{
+  border-color:#b8963e;
+  color:#b8963e;
+}
+
+.footer-kwm__legal{
+  font-size:13px;
+  color:rgba(255,255,255,.7);
+  white-space:nowrap;
+}
+.footer-kwm__legal a{
+  color:rgba(255,255,255,.7);
+  text-decoration:none;
+  transition:color .2s ease;
+}
+.footer-kwm__legal a:hover{ color:#ffffff; }
+.footer-kwm__legal .sep{
+  margin:0 10px;
+  color:rgba(255,255,255,.35);
+}
+
+/* 响应式 */
+@media (max-width: 1024px){
+  .footer-kwm__inner{ padding:0 24px; }
+  .footer-kwm__cols{ gap:40px; }
+}
+@media (max-width: 768px){
+  .footer-kwm__cols{
+    grid-template-columns: 1fr;
+    gap:34px;
+  }
+  .footer-kwm__bottom{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .footer-kwm__right{
+    align-items:flex-start;
+  }
+  .footer-kwm__legal{ white-space:normal; }
+}
+
     </style>
 
 </head>
-<body>
+<body id="top">
 
     <!-- ★ 侧边栏遮罩 ★ -->
     <div class="kwm-sidebar-mask" id="sidebarMask"></div>
@@ -796,37 +986,110 @@
                     <div class="partner-card">
                         <img src="images/hu.jpg" alt="胡浩伦律师照片" />
                         <h3>胡浩伦</h3>
-                        <p>实习合伙人</p>
+                        <p>助理合伙人</p>
                         <a class="details" href="partner_huhaolun.html">了解更多</a>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 办公地点 -->
-        <section class="offices" id="contact">
-            <div class="container">
-                <h2>全球办公室</h2>
-                <ul>
-                    <li>深圳总部：深圳市南山区丽水路2199号燕园大厦5座1-10楼</li>
-                    <li>北京办公室：北京市朝阳区</li>
-                    <li>上海办公室：上海市浦东新区</li>
-                    <li>新加坡办公室：新加坡金融区</li>
-                    <li>香港办公室：中环金融街</li>
-                    <li>纽约办公室：纽约曼哈顿</li>
-                    <li>阿布扎比办公室：阿布扎比商业区</li>
-                    <li>伦敦办公室：伦敦金融城</li>
-                </ul>
-            </div>
-        </section>
-    </main>
-
     <!-- 页脚 -->
-    <footer>
-        <div class="container">
-            <p>© 2026 威伦律师事务所 POWER & WHEELS – 版权所有</p>
+    <!-- ★ 页脚（黑底 + 金杜风格布局）★ -->
+<!-- ★ 页脚（改成截图布局）★ -->
+<footer class="footer-kwm" id="siteFooter">
+  <div class="footer-kwm__inner">
+
+    <!-- 顶部：三列导航 + 右上角返回顶部 -->
+    <div class="footer-kwm__top">
+      <div class="footer-kwm__cols">
+        <div class="footer-kwm__col">
+          <h4>关于我们</h4>
+          <ul>
+            <li><a href="#">专业团队</a></li>
+            <li><a href="#">职业发展</a></li>
+            <li><a href="#">办公机构</a></li>
+            <li><a href="#">威伦新闻</a></li>
+            <li><a href="#">联系我们</a></li>
+          </ul>
         </div>
-    </footer>
+
+        <div class="footer-kwm__col">
+          <h4>专业领域</h4>
+          <ul>
+            <li><a href="#">金融证券</a></li>
+            <li><a href="#">合规业务</a></li>
+            <li><a href="#">公司业务</a></li>
+            <li><a href="#">争议解决</a></li>
+            <li><a href="#">知识产权</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-kwm__col">
+          <h4>前沿观察</h4>
+          <ul>
+            <li><a href="#">出版物</a></li>
+            <li><a href="#">专题</a></li>
+            <li><a href="#">威伦博客</a></li>
+            <li><a href="#">订阅我们</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 右上角 ↑ -->
+      <a href="#top" class="footer-kwm__toTop" id="backToTopBtn" aria-label="返回顶部">↑</a>
+    </div>
+
+    <!-- 底部：左 Logo + 右 社交/法律 -->
+    <div class="footer-kwm__bottom">
+      <!-- 左：你的律所 Logo（保留你自己的） -->
+      <div class="footer-kwm__brand">
+        <div class="footer-kwm__brandRow">
+          <!-- 你的 P 图标 -->
+          <div class="footer-kwm__logoIcon">
+            <span>P</span>
+          </div>
+
+          <!-- 你的中英文名 -->
+          <div class="footer-kwm__brandText">
+            <div class="cn">威伦律师事务所</div>
+            <div class="en">POWER &amp; WHEELS</div>
+          </div>
+        </div>
+
+        <div class="footer-kwm__meta">
+          © 2026 威伦律师事务所 POWER &amp; WHEELS。京ICP备05084598号 ｜ 京公网安备：11010502038372号
+        </div>
+      </div>
+
+      <!-- 右：社交 + 法律 -->
+      <div class="footer-kwm__right">
+        <div class="footer-kwm__social">
+          <!-- 不依赖 FontAwesome：用内联 SVG -->
+          <a href="#" class="footer-kwm__socialBtn" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.5 8h4V23h-4V8Zm7 0h3.8v2.05h.05C12 8.8 13.45 7.75 15.7 7.75 20 7.75 20.8 10.5 20.8 14.1V23h-4v-7.75c0-1.85-.03-4.25-2.6-4.25-2.6 0-3 2.03-3 4.12V23h-4V8Z"/>
+            </svg>
+          </a>
+
+          <a href="#" class="footer-kwm__socialBtn" aria-label="WeChat">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path fill="currentColor" d="M8.6 3C4.4 3 1 5.9 1 9.5c0 2 1.1 3.8 2.9 5l-.7 2.5 2.7-1.4c.8.2 1.6.3 2.4.3.3 0 .6 0 .9-.1-.2-.6-.3-1.2-.3-1.9 0-3.6 3.4-6.5 7.6-6.5.4 0 .9 0 1.3.1C16.3 4.9 12.8 3 8.6 3Zm-2 5.6c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1Zm4 0c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1Zm6 0c-3.6 0-6.4 2.3-6.4 5.2 0 2.9 2.9 5.2 6.4 5.2.7 0 1.3-.1 2-.2l2.2 1.1-.6-2.1c1.4-1 2.3-2.4 2.3-4.1 0-2.9-2.9-5.1-5.9-5.1Zm-2 3.3c.5 0 .9.4.9.9s-.4.9-.9.9-.9-.4-.9-.9.4-.9.9-.9Zm3.4 0c.5 0 .9.4.9.9s-.4.9-.9.9-.9-.4-.9-.9.4-.9.9-.9Z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="footer-kwm__legal">
+          <a href="#">隐私政策</a>
+          <span class="sep">|</span>
+          <a href="#">使用条款和法律声明</a>
+          <span class="sep">|</span>
+          <a href="#">关于防范诈骗的警示</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
 
     <script src="js/script.js"></script>
 
@@ -949,6 +1212,26 @@
         });
     })();
     </script>
+<script>
+// 返回顶部按钮
+window.addEventListener('scroll', function () {
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    if (window.scrollY > 300) {
+        backToTopBtn.style.opacity = 1;
+        backToTopBtn.style.visibility = 'visible';
+    } else {
+        backToTopBtn.style.opacity = 0;
+        backToTopBtn.style.visibility = 'hidden';
+    }
+});
+
+document.getElementById('backToTopBtn').addEventListener('click', function () {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+</script>
 
 </body>
 </html>
