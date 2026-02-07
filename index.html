@@ -3,19 +3,535 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>威伦律师事务所 – 首页</title>
+    <title>威伦律师事务所 – 首页</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <style>
+    /* ========== KWM Hero Slider ========== */
+    .kwm-hero {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        min-height: 500px;
+        max-height: 900px;
+        overflow: hidden;
+        background: #0a0f18;
+        font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+    }
+    .kwm-hero .kwm-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 1.2s ease, visibility 1.2s ease;
+        z-index: 0;
+    }
+    .kwm-hero .kwm-slide.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 1;
+    }
+    .kwm-hero .kwm-slide-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        transform: scale(1.05);
+        transition: transform 8s ease-out;
+    }
+    .kwm-hero .kwm-slide.active .kwm-slide-bg {
+        transform: scale(1.0);
+    }
+    .kwm-hero .kwm-slide-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+    }
+    .kwm-hero .kwm-slide-body {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 8%;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.7s 0.3s ease, transform 0.7s 0.3s ease;
+    }
+    .kwm-hero .kwm-slide.active .kwm-slide-body {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .kwm-hero .kwm-slide-body h2 {
+        font-family: "Noto Serif SC", "Songti SC", "STSongti", "SimSun", serif;
+        font-size: 32px;
+        font-weight: 500;
+        color: #ffffff;
+        line-height: 1.6;
+        margin: 0 0 32px 0;
+        letter-spacing: 2px;
+    }
+    .kwm-hero .kwm-read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px 32px;
+        border-radius: 20px;
+        background: rgba(160, 130, 80, 0.55);
+        border: none;
+        letter-spacing: 1px;
+        transition: background 0.3s ease;
+        cursor: pointer;
+    }
+    .kwm-hero .kwm-read-more:hover {
+        background: rgba(160, 130, 80, 0.85);
+    }
+    .kwm-hero .kwm-read-more::after {
+        content: "\2192";
+        font-size: 15px;
+        transition: transform 0.3s ease;
+    }
+    .kwm-hero .kwm-read-more:hover::after {
+        transform: translateX(4px);
+    }
+    .kwm-hero .kwm-dots {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 10px;
+    }
+    .kwm-hero .kwm-dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.35);
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .kwm-hero .kwm-dots span.active {
+        background: #ffffff;
+    }
+    .kwm-hero .kwm-dots span:hover {
+        background: rgba(255, 255, 255, 0.7);
+        transform: scale(1.15);
+    }
+    @media (max-width: 1024px) {
+        .kwm-hero { height: 80vh; }
+        .kwm-hero .kwm-slide-body h2 { font-size: 26px; }
+    }
+    @media (max-width: 768px) {
+        .kwm-hero { height: 65vh; min-height: 360px; }
+        .kwm-hero .kwm-slide-body h2 { font-size: 20px; letter-spacing: 1px; }
+        .kwm-hero .kwm-read-more { font-size: 13px; padding: 8px 24px; }
+        .kwm-hero .kwm-dots { bottom: 20px; gap: 8px; }
+        .kwm-hero .kwm-dots span { width: 8px; height: 8px; }
+    }
+
+    /* ========== KWM 侧边栏 ========== */
+
+    /* 汉堡按钮（嵌入 header 左侧） */
+    .kwm-hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        margin-right: 18px;
+        flex-shrink: 0;
+    }
+    .kwm-hamburger span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: #ffffff;
+        border-radius: 1px;
+        transition: background 0.3s;
+    }
+    .kwm-hamburger:hover span {
+        background: #b8963e;
+    }
+
+    /* 遮罩层 */
+    .kwm-sidebar-mask {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+    .kwm-sidebar-mask.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* 侧边栏整体容器 */
+    .kwm-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 9999;
+        display: flex;
+        transform: translateX(-100%);
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .kwm-sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* 左栏：深色菜单 */
+    .kwm-sidebar-left {
+        width: 300px;
+        background: #1a1a1a;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        flex-shrink: 0;
+    }
+
+    /* 顶部：关闭按钮 + Logo */
+    .kwm-sidebar-header {
+        display: flex;
+        align-items: center;
+        padding: 22px 28px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        gap: 18px;
+        flex-shrink: 0;
+    }
+    .kwm-sidebar-close {
+        font-size: 24px;
+        color: #ffffff;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.3s;
+        flex-shrink: 0;
+    }
+    .kwm-sidebar-close:hover {
+        color: #b8963e;
+    }
+    .kwm-sidebar-logo {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+    .kwm-sidebar-logo .sb-cn {
+        font-size: 15px;
+        font-weight: 600;
+        color: #ffffff;
+        letter-spacing: 1px;
+    }
+    .kwm-sidebar-logo .sb-en {
+        font-size: 11px;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 0.5px;
+    }
+
+    /* 菜单项 */
+    .kwm-sidebar-nav {
+        list-style: none;
+        margin: 0;
+        padding: 12px 0;
+        flex: 1;
+    }
+    .kwm-sidebar-nav li {
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .kwm-sidebar-nav li a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 28px;
+        font-size: 15px;
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        transition: color 0.25s, background 0.25s;
+        letter-spacing: 0.5px;
+    }
+    .kwm-sidebar-nav li a:hover {
+        color: #ffffff;
+        background: rgba(255,255,255,0.04);
+    }
+    .kwm-sidebar-nav li a.active {
+        color: #b8963e;
+    }
+    /* 带箭头的项 */
+    .kwm-sidebar-nav li a .sb-arrow {
+        font-size: 14px;
+        color: rgba(255,255,255,0.35);
+        transition: color 0.25s, transform 0.25s;
+    }
+    .kwm-sidebar-nav li a:hover .sb-arrow,
+    .kwm-sidebar-nav li a.active .sb-arrow {
+        color: #b8963e;
+    }
+
+    /* 右栏：浅色子内容面板 */
+    .kwm-sidebar-right {
+        width: 0;
+        background: #ffffff;
+        overflow: hidden;
+        transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        display: flex;
+        flex-direction: column;
+    }
+    .kwm-sidebar-right.expanded {
+        width: 780px;
+    }
+
+    /* 右栏顶部搜索 */
+    .kwm-sb-search {
+        display: flex;
+        align-items: center;
+        padding: 20px 32px;
+        border-bottom: 1px solid #e8e8e8;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+    .kwm-sb-search input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        color: #333;
+        font-family: inherit;
+        background: transparent;
+    }
+    .kwm-sb-search input::placeholder {
+        color: #aaa;
+    }
+    .kwm-sb-search .sb-search-icon {
+        font-size: 20px;
+        color: #999;
+        cursor: pointer;
+    }
+
+    /* 右栏子面板内容 */
+    .kwm-sb-panel {
+        display: none;
+        padding: 28px 36px;
+        overflow-y: auto;
+        flex: 1;
+    }
+    .kwm-sb-panel.active {
+        display: block;
+    }
+
+    .kwm-sb-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 18px;
+        border-bottom: 2px solid #1a1a1a;
+    }
+    .kwm-sb-panel-header h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0;
+    }
+    .kwm-sb-panel-header a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #fff;
+        background: rgba(160,130,80,0.75);
+        padding: 8px 22px;
+        border-radius: 2px;
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+    .kwm-sb-panel-header a:hover {
+        background: rgba(160,130,80,1);
+    }
+
+    .kwm-sb-columns {
+        display: flex;
+        gap: 60px;
+    }
+    .kwm-sb-col h4 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #b8963e;
+        margin: 0 0 14px 0;
+    }
+    .kwm-sb-col ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .kwm-sb-col ul li {
+        border-bottom: none;
+    }
+    .kwm-sb-col ul li a {
+        display: block;
+        padding: 7px 0;
+        font-size: 14px;
+        color: #444;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    .kwm-sb-col ul li a:hover {
+        color: #b8963e;
+    }
+
+    /* 响应式 */
+    @media (max-width: 1024px) {
+        .kwm-sidebar-right.expanded { width: 420px; }
+        .kwm-sb-columns { flex-direction: column; gap: 28px; }
+    }
+    @media (max-width: 768px) {
+        .kwm-sidebar-left { width: 260px; }
+        .kwm-sidebar-right.expanded { width: calc(100vw - 260px); }
+        .kwm-sb-panel { padding: 20px 20px; }
+    }
+    </style>
+
 </head>
 <body>
+
+    <!-- ★ 侧边栏遮罩 ★ -->
+    <div class="kwm-sidebar-mask" id="sidebarMask"></div>
+
+    <!-- ★ 侧边栏 ★ -->
+    <div class="kwm-sidebar" id="kwmSidebar">
+
+        <!-- 左栏：深色菜单 -->
+        <div class="kwm-sidebar-left">
+            <div class="kwm-sidebar-header">
+                <div class="kwm-sidebar-close" id="sidebarClose">✕</div>
+                <div class="kwm-sidebar-logo">
+                    <span class="sb-cn">威伦律师事务所</span>
+                    <span class="sb-en">POWER &amp; WHEELS</span>
+                </div>
+            </div>
+            <ul class="kwm-sidebar-nav">
+                <li><a href="#" data-panel="panel-expertise" class="sb-has-sub active">专业领域 <span class="sb-arrow">›</span></a></li>
+                <li><a href="#" data-panel="panel-insights" class="sb-has-sub">洞察视野 <span class="sb-arrow">›</span></a></li>
+                <li><a href="#partners" class="sb-link">专业人员</a></li>
+                <li><a href="#contact" class="sb-link">办公机构</a></li>
+                <li><a href="#news" class="sb-link">新闻中心</a></li>
+                <li><a href="#" class="sb-link">关于我们</a></li>
+                <li><a href="#contact" class="sb-link">联系我们</a></li>
+            </ul>
+        </div>
+
+        <!-- 右栏：浅色子内容 -->
+        <div class="kwm-sidebar-right" id="sidebarRight">
+
+            <!-- 搜索栏 -->
+            <div class="kwm-sb-search">
+                <input type="text" placeholder="输入此处检索" />
+                <span class="sb-search-icon">🔍</span>
+            </div>
+
+            <!-- 面板：专业领域 -->
+            <div class="kwm-sb-panel active" id="panel-expertise">
+                <div class="kwm-sb-panel-header">
+                    <h3>专业领域</h3>
+                    <a href="#">了解我们的专业领域 →</a>
+                </div>
+                <div class="kwm-sb-columns">
+                    <div class="kwm-sb-col">
+                        <h4>业务领域</h4>
+                        <ul>
+                            <li><a href="#">银行与融资</a></li>
+                            <li><a href="#">公司与并购</a></li>
+                            <li><a href="#">争议解决与诉讼</a></li>
+                            <li><a href="#">合规业务</a></li>
+                            <li><a href="#">知识产权</a></li>
+                            <li><a href="#">证券与资本市场</a></li>
+                            <li><a href="#">私募股权与基金</a></li>
+                            <li><a href="#">家族财富安全与传承</a></li>
+                            <li><a href="#">数字经济</a></li>
+                            <li><a href="#">税务</a></li>
+                        </ul>
+                    </div>
+                    <div class="kwm-sb-col">
+                        <h4>行业领域</h4>
+                        <ul>
+                            <li><a href="#">人工智能</a></li>
+                            <li><a href="#">金融机构</a></li>
+                            <li><a href="#">房地产</a></li>
+                            <li><a href="#">医疗健康与医药</a></li>
+                            <li><a href="#">工程、能源和基础设施</a></li>
+                            <li><a href="#">汽车、制造业及工业</a></li>
+                            <li><a href="#">消费品与零售</a></li>
+                            <li><a href="#">电信、传媒与高科技</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 面板：洞察视野 -->
+            <div class="kwm-sb-panel" id="panel-insights">
+                <div class="kwm-sb-panel-header">
+                    <h3>洞察视野</h3>
+                    <a href="#">阅读更多文章 →</a>
+                </div>
+                <div class="kwm-sb-columns">
+                    <div class="kwm-sb-col">
+                        <h4>最新文章</h4>
+                        <ul>
+                            <li><a href="#">在跨国商事仲裁中保护海外权益的新趋势</a></li>
+                            <li><a href="#">CBAM扩围对中国企业的影响解析</a></li>
+                            <li><a href="#">数字经济时代的知识产权保护</a></li>
+                        </ul>
+                    </div>
+                    <div class="kwm-sb-col">
+                        <h4>出版物</h4>
+                        <ul>
+                            <li><a href="#">《海南自由贸易港法律政策研究综述》</a></li>
+                            <li><a href="#">跨境股权投资税务实务手册</a></li>
+                            <li><a href="#">金融资产争议解决案例集</a></li>
+                        </ul>
+                    </div>
+                    <div class="kwm-sb-col">
+                        <h4>专题</h4>
+                        <ul>
+                            <li><a href="#">数字经济</a></li>
+                            <li><a href="#">海外权益保护</a></li>
+                            <li><a href="#">知识产权</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <!-- 顶部导航栏 -->
     <header>
         <div class="container nav-container">
             <div class="logo">
-                <!-- 使用自定义徽标实现 P 标不高于文字 -->
+                <!-- ★ 汉堡菜单按钮 ★ -->
+                <div class="kwm-hamburger" id="sidebarOpen">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <div class="logo-icon">P</div>
                 <div class="brand">
                     <span class="cn">威伦律师事务所</span>
-                    <span class="en">POWER & WHEELS</span>
+                    <span class="en">POWER & WHEELS</span>
                 </div>
             </div>
             <nav>
@@ -31,38 +547,52 @@
     </header>
 
     <main>
-        <!-- 头图轮播 -->
-        <section class="hero-slider">
-            <div class="slide active" style="background-image:url('images/city1.jpg');">
-                <div class="caption">
-                    <h1>以卓越之法，护航您的未来</h1>
+        <!-- ★ 新轮播 ★ -->
+        <section class="kwm-hero" id="kwmHero">
+
+            <div class="kwm-slide active">
+                <div class="kwm-slide-bg" style="background-image: url('images/city1.jpg');"></div>
+                <div class="kwm-slide-overlay"></div>
+                <div class="kwm-slide-body">
+                    <h2>立足深圳，服务全球</h2>
+                    <a href="#" class="kwm-read-more">阅读更多</a>
                 </div>
             </div>
-            <div class="slide" style="background-image:url('images/city2.jpg');">
-                <div class="caption">
-                    <h1>立足深圳，服务全球</h1>
+
+            <div class="kwm-slide">
+                <div class="kwm-slide-bg" style="background-image: url('images/city2.jpg');"></div>
+                <div class="kwm-slide-overlay"></div>
+                <div class="kwm-slide-body">
+                    <h2>威伦助力君凯乳业完成13亿美元香港首次公开发行及全球发行</h2>
+                    <a href="#" class="kwm-read-more">阅读更多</a>
                 </div>
             </div>
-            <div class="slide" style="background-image:url('images/city3.jpg');">
-                <div class="caption">
-                    <h1>专业至上，诚信为本</h1>
+
+            <div class="kwm-slide">
+                <div class="kwm-slide-bg" style="background-image: url('images/city3.jpg');"></div>
+                <div class="kwm-slide-overlay"></div>
+                <div class="kwm-slide-body">
+                    <h2>重磅发布：《家族财富安全与传承——家事争议案例篇》</h2>
+                    <a href="#" class="kwm-read-more">阅读更多</a>
                 </div>
             </div>
-            <div class="slide" style="background-image:url('images/city4.jpg');">
-                <div class="caption">
-                    <h1>融合国际视野，引领行业创新</h1>
+
+            <div class="kwm-slide">
+                <div class="kwm-slide-bg" style="background-image: url('images/city4.jpg');"></div>
+                <div class="kwm-slide-overlay"></div>
+                <div class="kwm-slide-body">
+                    <h2>重磅发布：《矿产资源法》2024年修订全面解读</h2>
+                    <a href="#" class="kwm-read-more">阅读更多</a>
                 </div>
             </div>
-            <div class="controls">
-                <span class="prev">&#x276E;</span>
-                <span class="next">&#x276F;</span>
+
+            <div class="kwm-dots">
+                <span class="active" data-i="0"></span>
+                <span data-i="1"></span>
+                <span data-i="2"></span>
+                <span data-i="3"></span>
             </div>
-            <div class="indicators">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
+
         </section>
 
         <!-- 栏目介绍 -->
@@ -93,19 +623,19 @@
                 <div class="entries">
                     <article>
                         <h4>在跨国商事仲裁中保护海外权益的新趋势</h4>
-                        <p class="meta">前沿观察 · 作者：连熠威 · 2026/02/03</p>
+                        <p class="meta">前沿观察 · 作者：连熠威 · 2026/02/03</p>
                         <p>随着全球经济一体化，跨境交易纠纷日益增多，连熠威律师分析了最新的仲裁法规和实践，提出有效维护企业海外权益的策略。</p>
                         <a href="#" class="read-more">阅读全文</a>
                     </article>
                     <article>
                         <h4>CBAM扩围对中国企业的影响解析</h4>
-                        <p class="meta">前沿观察 · 作者：连熠威 · 2026/02/02</p>
+                        <p class="meta">前沿观察 · 作者：连熠威 · 2026/02/02</p>
                         <p>欧盟碳边境调节机制的新规即将实施，连熠威就其对中国出口企业的挑战与机遇进行深入分析，并提供应对建议。</p>
                         <a href="#" class="read-more">阅读全文</a>
                     </article>
                     <article>
                         <h4>数字经济时代的知识产权保护</h4>
-                        <p class="meta">前沿观察 · 作者：连熠威 · 2026/01/29</p>
+                        <p class="meta">前沿观察 · 作者：连熠威 · 2026/01/29</p>
                         <p>在AI和大数据迅速发展的今天，如何保护企业核心技术与商业秘密成为重点，本文围绕最新案例提出创新解决方案。</p>
                         <a href="#" class="read-more">阅读全文</a>
                     </article>
@@ -120,19 +650,19 @@
                 <div class="entries">
                     <article>
                         <h4>重磅发布：《海南自由贸易港法律政策研究综述》</h4>
-                        <p class="meta">出版物 · 作者：连熠威 · 2025/09/24</p>
+                        <p class="meta">出版物 · 作者：连熠威 · 2025/09/24</p>
                         <p>本报告全面梳理了海南自由贸易港建设的法律政策，深度解析自贸港制度创新背后的法理与实践。</p>
                         <a href="#" class="read-more">阅读摘要</a>
                     </article>
                     <article>
                         <h4>中国对外和外国对华股权投资税务实务手册</h4>
-                        <p class="meta">出版物 · 作者：连熠威 · 2025/09/16</p>
+                        <p class="meta">出版物 · 作者：连熠威 · 2025/09/16</p>
                         <p>该手册详细阐述了跨境股权投资的税收政策及风险防控，帮助企业合理规划投资结构。</p>
                         <a href="#" class="read-more">阅读摘要</a>
                     </article>
                     <article>
                         <h4>金融资产争议解决案例集</h4>
-                        <p class="meta">出版物 · 作者：连熠威 · 2025/08/17</p>
+                        <p class="meta">出版物 · 作者：连熠威 · 2025/08/17</p>
                         <p>本书精选了多起典型金融纠纷案例，从诉讼与仲裁实践出发，为金融机构提供实用指引。</p>
                         <a href="#" class="read-more">阅读摘要</a>
                     </article>
@@ -147,19 +677,19 @@
                 <div class="entries">
                     <article>
                         <h4>连熠威团队在国际仲裁中为客户赢得重大胜诉</h4>
-                        <p class="meta">重大项目 · 2026/01/20</p>
+                        <p class="meta">重大项目 · 2026/01/20</p>
                         <p>威伦律师事务所代表某跨国企业参与一项标的额逾十亿美元的仲裁案件，连熠威带领团队全程主导并最终实现客户全胜。</p>
                         <a href="#" class="read-more">阅读详情</a>
                     </article>
                     <article>
                         <h4>威伦助力某国企成功发行绿色债券</h4>
-                        <p class="meta">重大项目 · 2026/01/12</p>
+                        <p class="meta">重大项目 · 2026/01/12</p>
                         <p>在碳中和政策背景下，我所团队为一家大型国企发行绿色债券提供全程法律服务，彰显资本市场专业实力。</p>
                         <a href="#" class="read-more">阅读详情</a>
                     </article>
                     <article>
                         <h4>连熠威解读数字经济时代跨境证券发行新规</h4>
-                        <p class="meta">重大项目 · 2026/01/05</p>
+                        <p class="meta">重大项目 · 2026/01/05</p>
                         <p>针对最新出台的跨境证券发行监管办法，连熠威发表深度解读文章，并为企业提供合规建议。</p>
                         <a href="#" class="read-more">阅读详情</a>
                     </article>
@@ -209,10 +739,131 @@
     <!-- 页脚 -->
     <footer>
         <div class="container">
-            <p>© 2026 威伦律师事务所 POWER & WHEELS – 版权所有</p>
+            <p>© 2026 威伦律师事务所 POWER & WHEELS – 版权所有</p>
         </div>
     </footer>
 
     <script src="js/script.js"></script>
+
+    <!-- 轮播脚本 -->
+    <script>
+    ;(function () {
+        var hero   = document.getElementById('kwmHero');
+        var slides = hero.querySelectorAll('.kwm-slide');
+        var dots   = hero.querySelectorAll('.kwm-dots span');
+        var total  = slides.length;
+        var cur    = 0;
+        var timer  = null;
+        var INTERVAL = 5000;
+
+        function go(idx) {
+            var next = ((idx % total) + total) % total;
+            if (next === cur) return;
+            slides[cur].classList.remove('active');
+            dots[cur].classList.remove('active');
+            cur = next;
+            slides[cur].classList.add('active');
+            dots[cur].classList.add('active');
+        }
+
+        function scheduleNext() {
+            timer = setTimeout(function () {
+                go(cur + 1);
+                scheduleNext();
+            }, INTERVAL);
+        }
+
+        function stopAuto() { clearTimeout(timer); timer = null; }
+        function resetAuto() { stopAuto(); scheduleNext(); }
+
+        dots.forEach(function (el) {
+            el.addEventListener('click', function () { go(+this.dataset.i); resetAuto(); });
+        });
+
+        hero.addEventListener('mouseenter', stopAuto);
+        hero.addEventListener('mouseleave', function () { if (!timer) scheduleNext(); });
+
+        var touchX = 0;
+        hero.addEventListener('touchstart', function (e) { touchX = e.changedTouches[0].clientX; stopAuto(); }, { passive: true });
+        hero.addEventListener('touchend', function (e) {
+            var dx = e.changedTouches[0].clientX - touchX;
+            if (Math.abs(dx) > 50) { dx < 0 ? go(cur + 1) : go(cur - 1); }
+            resetAuto();
+        }, { passive: true });
+
+        scheduleNext();
+    })();
+    </script>
+
+    <!-- ★ 侧边栏脚本 ★ -->
+    <script>
+    ;(function () {
+        var sidebar   = document.getElementById('kwmSidebar');
+        var mask      = document.getElementById('sidebarMask');
+        var btnOpen   = document.getElementById('sidebarOpen');
+        var btnClose  = document.getElementById('sidebarClose');
+        var rightPane = document.getElementById('sidebarRight');
+        var navLinks  = sidebar.querySelectorAll('.kwm-sidebar-nav a');
+        var panels    = sidebar.querySelectorAll('.kwm-sb-panel');
+
+        /* 打开侧边栏 */
+        function openSidebar() {
+            sidebar.classList.add('open');
+            mask.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            /* 默认展开第一个有子面板的项 */
+            var firstSub = sidebar.querySelector('.sb-has-sub');
+            if (firstSub) activatePanel(firstSub);
+        }
+
+        /* 关闭侧边栏 */
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            mask.classList.remove('open');
+            document.body.style.overflow = '';
+            rightPane.classList.remove('expanded');
+        }
+
+        /* 激活某个面板 */
+        function activatePanel(link) {
+            /* 高亮当前菜单项 */
+            navLinks.forEach(function (a) { a.classList.remove('active'); });
+            link.classList.add('active');
+
+            var panelId = link.getAttribute('data-panel');
+            if (panelId) {
+                panels.forEach(function (p) { p.classList.remove('active'); });
+                var target = document.getElementById(panelId);
+                if (target) target.classList.add('active');
+                rightPane.classList.add('expanded');
+            } else {
+                rightPane.classList.remove('expanded');
+            }
+        }
+
+        btnOpen.addEventListener('click', openSidebar);
+        btnClose.addEventListener('click', closeSidebar);
+        mask.addEventListener('click', closeSidebar);
+
+        /* ESC 关闭 */
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeSidebar();
+        });
+
+        /* 菜单项点击 */
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                if (this.classList.contains('sb-has-sub')) {
+                    e.preventDefault();
+                    activatePanel(this);
+                } else {
+                    /* 普通链接：关闭侧边栏后跳转 */
+                    closeSidebar();
+                }
+            });
+        });
+    })();
+    </script>
+
 </body>
 </html>
