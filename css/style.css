@@ -540,3 +540,18 @@ footer {
         font-size: 10px;
     }
 }
+/* ===== Fix: header 太贴左（只修 header，不影响正文） ===== */
+header .nav-container{
+  width: 100%;
+  max-width: 1200px;     /* 跟你正文 container 一致的话就保留 */
+  margin: 0 auto;        /* 居中 */
+  padding: 0 32px;       /* 左右留白：你觉得还贴左就调大，比如 40px */
+  box-sizing: border-box;
+}
+
+/* 小屏留白小一点 */
+@media (max-width: 768px){
+  header .nav-container{
+    padding: 0 16px;
+  }
+}
