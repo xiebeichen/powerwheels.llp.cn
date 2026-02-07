@@ -3,19 +3,273 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>胡浩伦 – 威伦律师事务所</title>
+    <title>胡浩伦 – 威伦律师事务所</title>
     <link rel="stylesheet" href="css/style.css" />
+
+    <!-- 同上：保证合伙人页必定显示汉堡+侧边栏 -->
+    <style>
+        .logo{display:flex;align-items:center;gap:16px;}
+        .brand-link{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+        .kwm-hamburger{
+            display:flex;flex-direction:column;justify-content:center;gap:5px;
+            width:28px;height:28px;cursor:pointer;flex-shrink:0;
+        }
+        .kwm-hamburger span{display:block;width:100%;height:2px;background:#fff;border-radius:1px;}
+        .kwm-hamburger:hover span{background:#b8963e;}
+
+        .kwm-sidebar-mask{
+            position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;
+            opacity:0;visibility:hidden;transition:opacity .35s ease, visibility .35s ease;
+        }
+        .kwm-sidebar-mask.open{opacity:1;visibility:visible;}
+
+        .kwm-sidebar{
+            position:fixed;top:0;left:0;height:100vh;z-index:9999;display:flex;
+            transform:translateX(-100%);
+            transition:transform .4s cubic-bezier(.22,1,.36,1);
+            font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+        }
+        .kwm-sidebar.open{transform:translateX(0);}
+
+        .kwm-sidebar-left{
+            width:300px;background:#1a1a1a;color:#fff;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;
+        }
+        .kwm-sidebar-header{
+            display:flex;align-items:center;padding:22px 28px;border-bottom:1px solid rgba(255,255,255,.08);
+            gap:18px;flex-shrink:0;
+        }
+        .kwm-sidebar-close{font-size:24px;color:#fff;cursor:pointer;line-height:1;transition:color .3s;}
+        .kwm-sidebar-close:hover{color:#b8963e;}
+        .kwm-sidebar-logo{display:flex;flex-direction:column;gap:2px;}
+        .kwm-sidebar-logo .sb-cn{font-size:15px;font-weight:600;letter-spacing:1px;}
+        .kwm-sidebar-logo .sb-en{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.5px;}
+
+        .kwm-sidebar-nav{list-style:none;margin:0;padding:12px 0;flex:1;}
+        .kwm-sidebar-nav li{border-bottom:1px solid rgba(255,255,255,.05);}
+        .kwm-sidebar-nav li a{
+            display:flex;align-items:center;justify-content:space-between;
+            padding:18px 28px;font-size:15px;color:rgba(255,255,255,.8);text-decoration:none;
+            transition:color .25s, background .25s;letter-spacing:.5px;
+        }
+        .kwm-sidebar-nav li a:hover{color:#fff;background:rgba(255,255,255,.04);}
+        .kwm-sidebar-nav li a.active{color:#b8963e;}
+        .sb-arrow{font-size:14px;color:rgba(255,255,255,.35);}
+        .kwm-sidebar-nav li a:hover .sb-arrow,
+        .kwm-sidebar-nav li a.active .sb-arrow{color:#b8963e;}
+
+        .kwm-sidebar-right{
+            width:0;background:#fff;overflow:hidden;
+            transition:width .35s cubic-bezier(.22,1,.36,1);
+            display:flex;flex-direction:column;
+        }
+        .kwm-sidebar-right.expanded{width:780px;}
+
+        .kwm-sb-search{display:flex;align-items:center;padding:20px 32px;border-bottom:1px solid #e8e8e8;gap:12px;flex-shrink:0;}
+        .kwm-sb-search input{flex:1;border:none;outline:none;font-size:15px;color:#333;background:transparent;}
+        .kwm-sb-search input::placeholder{color:#aaa;}
+        .sb-search-icon{font-size:20px;color:#999;cursor:pointer;}
+
+        .kwm-sb-panel{display:none;padding:28px 36px;overflow-y:auto;flex:1;}
+        .kwm-sb-panel.active{display:block;}
+
+        .kwm-sb-panel-header{
+            display:flex;align-items:center;justify-content:space-between;
+            margin-bottom:20px;padding-bottom:18px;border-bottom:2px solid #1a1a1a;
+        }
+        .kwm-sb-panel-header h3{font-size:18px;font-weight:600;color:#1a1a1a;margin:0;}
+        .kwm-sb-panel-header a{
+            display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#fff;
+            background:rgba(160,130,80,.75);padding:8px 22px;border-radius:2px;text-decoration:none;
+        }
+        .kwm-sb-panel-header a:hover{background:rgba(160,130,80,1);}
+
+        .kwm-sb-columns{display:flex;gap:60px;}
+        .kwm-sb-col h4{font-size:14px;font-weight:600;color:#b8963e;margin:0 0 14px 0;}
+        .kwm-sb-col ul{list-style:none;margin:0;padding:0;}
+        .kwm-sb-col ul li a{display:block;padding:7px 0;font-size:14px;color:#444;text-decoration:none;}
+        .kwm-sb-col ul li a:hover{color:#b8963e;}
+
+        @media (max-width:1024px){
+            .kwm-sidebar-right.expanded{width:420px;}
+            .kwm-sb-columns{flex-direction:column;gap:28px;}
+        }
+        @media (max-width:768px){
+            .kwm-sidebar-left{width:260px;}
+            .kwm-sidebar-right.expanded{width:calc(100vw - 260px);}
+            .kwm-sb-panel{padding:20px 20px;}
+        }
+/* 强制合伙人页logo与主页一致（覆盖旧 .logo-icon 定义） */
+header .brand-link { text-decoration: none; color: inherit; }
+header .brand-logo { display:flex; align-items:center; gap:8px; height:42px; }
+header .brand-text { display:flex; flex-direction:column; justify-content:center; }
+    </style>
 </head>
-<body>
-    <header>
-        <div class="container nav-container">
-            <div class="logo">
-                <div class="logo-icon">P</div>
-                <div class="brand">
-                    <span class="cn">威伦律师事务所</span>
-                    <span class="en">POWER & WHEELS</span>
+
+<body id="top">
+
+    <div class="kwm-sidebar-mask" id="sidebarMask"></div>
+
+    <div class="kwm-sidebar" id="kwmSidebar">
+        <div class="kwm-sidebar-left">
+            <div class="kwm-sidebar-header">
+                <div class="kwm-sidebar-close" id="sidebarClose">✕</div>
+                <div class="kwm-sidebar-logo">
+                    <span class="sb-cn">威伦律师事务所</span>
+                    <span class="sb-en">POWER &amp; WHEELS</span>
                 </div>
             </div>
+
+            <ul class="kwm-sidebar-nav">
+                <li><a href="#" data-panel="panel-expertise" class="sb-has-sub active">专业领域 <span class="sb-arrow">›</span></a></li>
+                <li><a href="#" data-panel="panel-insights" class="sb-has-sub">洞察视野 <span class="sb-arrow">›</span></a></li>
+                <li><a href="index.html#partners" class="sb-link">专业人员</a></li>
+                <li><a href="index.html#contact" class="sb-link">办公机构</a></li>
+                <li><a href="index.html#news" class="sb-link">新闻中心</a></li>
+                <li><a href="index.html" class="sb-link">关于我们</a></li>
+                <li><a href="index.html#contact" class="sb-link">联系我们</a></li>
+            </ul>
+        </div>
+
+        <div class="kwm-sidebar-right" id="sidebarRight">
+            <div class="kwm-sb-search">
+                <input type="text" placeholder="输入此处检索" />
+                <span class="sb-search-icon">🔍</span>
+            </div>
+
+            <div class="kwm-sb-panel active" id="panel-expertise">
+                <div class="kwm-sb-panel-header">
+                    <h3>专业领域</h3>
+                    <a href="#">了解我们的专业领域 →</a>
+                </div>
+
+                <div class="kwm-sb-columns">
+                    <div class="kwm-sb-col">
+                        <h4>业务领域</h4>
+                        <ul>
+                            <li><a href="#">银行与融资</a></li>
+                            <li><a href="#">公司与并购</a></li>
+                            <li><a href="#">争议解决与诉讼</a></li>
+                            <li><a href="#">合规业务</a></li>
+                            <li><a href="#">知识产权</a></li>
+                            <li><a href="#">证券与资本市场</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="kwm-sb-col">
+                        <h4>行业领域</h4>
+                        <ul>
+                            <li><a href="#">人工智能</a></li>
+                            <li><a href="#">金融机构</a></li>
+                            <li><a href="#">房地产</a></li>
+                            <li><a href="#">医疗健康与医药</a></li>
+                            <li><a href="#">工程、能源和基础设施</a></li>
+                            <li><a href="#">汽车、制造业及工业</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kwm-sb-panel" id="panel-insights">
+                <div class="kwm-sb-panel-header">
+                    <h3>洞察视野</h3>
+                    <a href="#">阅读更多文章 →</a>
+                </div>
+
+                <div class="kwm-sb-columns">
+                    <div class="kwm-sb-col">
+                        <h4>最新文章</h4>
+                        <ul>
+                            <li><a href="#">在跨国商事仲裁中保护海外权益的新趋势</a></li>
+                            <li><a href="#">CBAM扩围对中国企业的影响解析</a></li>
+                            <li><a href="#">数字经济时代的知识产权保护</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="kwm-sb-col">
+                        <h4>出版物</h4>
+                        <ul>
+                            <li><a href="#">《海南自由贸易港法律政策研究综述》</a></li>
+                            <li><a href="#">跨境股权投资税务实务手册</a></li>
+                            <li><a href="#">金融资产争议解决案例集</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <header>
+        <div class="container nav-container">
+           <div class="logo">
+    <!-- 汉堡始终在左 -->
+    <div class="kwm-hamburger" id="sidebarOpen" aria-label="打开菜单">
+        <span></span><span></span><span></span>
+    </div>
+
+    <!-- 点击logo回首页 -->
+    <a class="brand-link" href="index.html" aria-label="返回首页">
+        <div class="brand-logo">
+            <!-- 红色圆角方块 + P -->
+            <div class="logo-icon" style="
+                width: 42px;
+                height: 42px;
+                background-color: #e63946;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 12px;
+                box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+            ">
+                <span style="
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: white;
+                    letter-spacing: 1px;
+                    font-family: 'Arial', sans-serif;
+                ">P</span>
+            </div>
+
+            <!-- 中英文两行 -->
+            <div class="brand-text" style="
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: left;
+                gap: 2px;
+                font-family: 'Noto Serif SC', 'Songti SC', serif;
+            ">
+                <span class="cn" style="
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #ffffff;
+                    letter-spacing: 1px;
+                    line-height: 1.4;
+                ">威伦律师事务所</span>
+
+                <span class="en" style="
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #ffffff;
+                    letter-spacing: 1px;
+                    line-height: 1.4;
+                    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+                ">
+                    POWER &amp;
+                    <span style="color: #e63946;">W</span>
+                    <span style="color: #2a5db0;">H</span>
+                    <span style="color: #e63946;">E</span>
+                    <span style="color: #2a5db0;">E</span>
+                    <span style="color: #e63946;">L</span>
+                    <span style="color: #2a5db0;">S</span>
+                </span>
+            </div>
+        </div>
+    </a>
+</div>
+
+
             <nav>
                 <ul>
                     <li><a href="index.html">首页</a></li>
@@ -29,7 +283,6 @@
     </header>
 
     <main>
-        <!-- 个人页头图 -->
         <section class="person-hero" style="margin-top:80px; background: url('images/city4.jpg') center/cover no-repeat;">
             <div class="overlay">
                 <div class="container hero-content">
@@ -47,30 +300,28 @@
             </div>
         </section>
 
-        <!-- 个人简介 -->
         <section class="person-detail">
             <div class="container">
                 <h2>个人简介</h2>
-                <p>胡浩伦，实习合伙人，法律硕士。自加入威伦律师事务所以来，他积极参与民商事争议解决、公司治理及合规事务，为客户提供专业高效的法律服务。</p>
+                <p>胡浩伦，助理合伙人，法律硕士。自加入威伦律师事务所以来，他积极参与民商事争议解决、公司治理及合规事务，为客户提供专业高效的法律服务。</p>
                 <p>工作期间，胡浩伦曾协助处理多起复杂诉讼与仲裁案件，擅长从商业角度出发制定纠纷解决方案，帮助客户在激烈的商业竞争中维护合法权益。</p>
                 <p>他热衷于学术研究，曾在国内知名法律期刊发表多篇文章，并致力于推进法学理论与实务的结合。</p>
             </div>
         </section>
 
-        <!-- 相关新闻 -->
         <section class="person-news">
             <div class="container">
                 <h2>相关新闻</h2>
                 <div class="entries">
                     <article>
                         <h4>胡浩伦分享企业合规体系建设经验</h4>
-                        <p class="meta">新闻 · 2026/01/22</p>
+                        <p class="meta">新闻 · 2026/01/22</p>
                         <p>在近日举办的企业合规论坛上，胡浩伦就如何建立完善的内控和合规体系进行了主题演讲，受到业界广泛关注。</p>
                         <a href="#" class="read-more">了解更多</a>
                     </article>
                     <article>
                         <h4>胡浩伦参与编写《民商事争议解决指引》</h4>
-                        <p class="meta">新闻 · 2025/10/12</p>
+                        <p class="meta">新闻 · 2025/10/12</p>
                         <p>该指引围绕典型争议案件，总结仲裁和诉讼的实务经验，为企业提供实用指南。</p>
                         <a href="#" class="read-more">了解更多</a>
                     </article>
@@ -81,8 +332,10 @@
 
     <footer>
         <div class="container">
-            <p>© 2026 威伦律师事务所 POWER & WHEELS – 版权所有</p>
+            <p>© 2026 威伦律师事务所 POWER &amp; WHEELS – 版权所有</p>
         </div>
     </footer>
+
+    <script src="js/sidebar.js"></script>
 </body>
 </html>
